@@ -1,0 +1,65 @@
+﻿@model Nop.Plugin.Widgets.HomePageNewProductsPlugin.Models.ConfigurationModel
+@using Nop.Web.Framework
+
+@{
+    Layout = "_ConfigurePlugin";
+}
+
+@await Component.InvokeAsync("StoreScopeConfiguration")
+
+
+<form asp-controller="WidgetsGoogleAnalytics" asp-action="Configure" method="post">
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Header 1
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="WidgetZone_OverrideForStore" asp-input="WidgetZone" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="WidgetZone" />
+                    </div>                    
+                </div>
+                <div class="form-group">
+                    <label asp-for="WidgetZone" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <select asp-for="WidgetZone" asp-items="Html.GetEnumSelectList<WidgetZone>()">
+                            <option selected="selected" value="">Please select</option>
+                        </select>
+                        <span asp-validation-for="WidgetZone" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <table class="adminContent">
+            <tr>
+                <td class="adminTitle">
+                    @*@Html.NopLabelFor(model => model.)*@asdasdas222
+                </td>
+                <td class="adminData">
+                    @Html.ValidationMessageFor(model => model.WidgetZone)
+                </td>
+            </tr>
+            <tr>
+                <td class="adminTitle">
+                    @*@Html.NopLabelFor(model => model.ProductsCount):*@333
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.NumberOfAddedProducts)
+                    @Html.ValidationMessageFor(model => model.NumberOfAddedProducts)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+                </td>
+            </tr>
+        </table>
+    }
