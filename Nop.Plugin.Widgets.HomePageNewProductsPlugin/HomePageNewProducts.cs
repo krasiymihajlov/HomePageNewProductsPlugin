@@ -58,25 +58,6 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin
             };
         }
 
-        //public void GetConfigurationRoute(out string actionName, out string controllerName, out RouteValueDictionary routeValues)
-        //{
-        //    actionName = "Configure";
-        //    controllerName = "WidgetsHomePageNewProducts";
-        //    routeValues = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Widgets.HomePageNewProducts.Controllers" }, { "area", null } };
-        //}
-
-        //public void GetDisplayWidgetRoute(string widgetZone, out string actionName, out string controllerName, out RouteValueDictionary routeValues)
-        //{
-        //    actionName = "PublicInfo";
-        //    controllerName = "WidgetsHomePageNewProducts";
-        //    routeValues = new RouteValueDictionary
-        //    {
-        //        {"Namespaces", "Nop.Plugin.Widgets.HomePageNewProducts.Controllers"},
-        //        {"area", null},
-        //        {"widgetZone", widgetZone}
-        //    };
-        //}
-
         public override string GetConfigurationPageUrl()
         {
             return $"{_webHelper.GetStoreLocation()}Admin/WidgetsHomePageNewProducts/Configure";

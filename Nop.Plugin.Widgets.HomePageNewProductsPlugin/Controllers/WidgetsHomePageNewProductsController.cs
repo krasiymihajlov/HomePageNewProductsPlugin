@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
+using Nop.Core.Domain.Catalog;
 using Nop.Plugin.Widgets.HomePageNewProductsPlugin.Models;
+using Nop.Services.Catalog;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
 using Nop.Services.Messages;
@@ -18,17 +20,20 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin.Controllers
         private readonly IStoreContext _storeContext;
         private readonly INotificationService _notificationService;
         private readonly ILocalizationService _localizationService;
+        private readonly IProductService _productService;
 
         public WidgetsHomePageNewProductsController(IPermissionService permissionService,
             ISettingService settingService,
             IStoreContext storeContext,
             INotificationService notificationService,
-            ILocalizationService localizationService)
+            ILocalizationService localizationService,
+            IProductService productService)
         {
             _permissionService = permissionService;
             _settingService = settingService;
             _storeContext = storeContext;
             _notificationService = notificationService;
+            _productService = productService;
         }
 
         [AuthorizeAdmin] 
@@ -74,6 +79,26 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin.Controllers
             _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
 
             return Configure();
+        }
+
+        //[ChildActionOnly]
+        public ActionResult PublicInfo(string widgetZone, object additionalData = null)
+        {
+            var productsCount = this._settingService.GetSettingByKey<int>("HomePageNewProductsSettings.NumberOfAddedProducts");
+            var products = _productService.SearchProducts(
+                orderBy: ProductSortingEnum.CreatedOn,
+                pageSize: productsCount);
+
+            var model = new PublicViewModel();
+            //model.Products = this.PrepareProductOverviewModels(_workContext,
+            //    _storeContext, _categoryService, _productService, _specificationAttributeService,
+            //    _priceCalculationService, _priceFormatter, _permissionService,
+            //    _localizationService, _taxService, _currencyService,
+            //    _pictureService, _webHelper, _cacheManager,
+            //    _catalogSettings, _mediaSettings, products);
+
+
+            return View("~/Plugins/Widgets.HomePageNewProducts/Views/WidgetsHomePageNewProducts/PublicInfo.cshtml", model);
         }
     }
 }
