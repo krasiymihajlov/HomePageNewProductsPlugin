@@ -62,7 +62,7 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin
         {
             return $"{_webHelper.GetStoreLocation()}Admin/WidgetsHomePageNewProducts/Configure";
         }
-
+               
         public override void Install()
         {
             //settings

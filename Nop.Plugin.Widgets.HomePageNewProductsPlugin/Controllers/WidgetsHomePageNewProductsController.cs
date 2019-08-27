@@ -47,12 +47,20 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin.Controllers
 
             var storeScope = _storeContext.ActiveStoreScopeConfiguration;
             var homePageNewProductsSettings = _settingService.LoadSetting<HomePageNewProductsSettings>(storeScope);
-            var model = new ConfigurationModel();
-            model.WidgetZone = homePageNewProductsSettings.WidgetZone;
-            model.NumberOfAddedProducts = homePageNewProductsSettings.NumberOfAddedProducts;
-            model.ActiveStoreScopeConfiguration = storeScope;
+            var model = new ConfigurationModel
+            {
+                WidgetZone = homePageNewProductsSettings.WidgetZone,
+                NumberOfAddedProducts = homePageNewProductsSettings.NumberOfAddedProducts,
+                ActiveStoreScopeConfiguration = storeScope,
+            };
 
-            return View("~/Plugins/Widgets.HomePageNewProductsPlugin/Views/Configure.cshtml", model);
+            if (storeScope > 0)
+            {
+                model.WidgetZone_OverrideForStore = _settingService.SettingExists(homePageNewProductsSettings, x => x.WidgetZone, storeScope);
+                model.NumberOfAddedProducts_OverrideForStore = _settingService.SettingExists(homePageNewProductsSettings, x => x.NumberOfAddedProducts, storeScope);
+            }
+
+            return View("~/Plugins/Widgets.HomePageNewProductsPlugin/Views/WidgetsHomePageNewProducts/Configure.cshtml", model);
         }
 
         [HttpPost]
@@ -79,26 +87,6 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin.Controllers
             _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
 
             return Configure();
-        }
-
-        //[ChildActionOnly]
-        public ActionResult PublicInfo(string widgetZone, object additionalData = null)
-        {
-            var productsCount = this._settingService.GetSettingByKey<int>("HomePageNewProductsSettings.NumberOfAddedProducts");
-            var products = _productService.SearchProducts(
-                orderBy: ProductSortingEnum.CreatedOn,
-                pageSize: productsCount);
-
-            var model = new PublicViewModel();
-            //model.Products = this.PrepareProductOverviewModels(_workContext,
-            //    _storeContext, _categoryService, _productService, _specificationAttributeService,
-            //    _priceCalculationService, _priceFormatter, _permissionService,
-            //    _localizationService, _taxService, _currencyService,
-            //    _pictureService, _webHelper, _cacheManager,
-            //    _catalogSettings, _mediaSettings, products);
-
-
-            return View("~/Plugins/Widgets.HomePageNewProducts/Views/WidgetsHomePageNewProducts/PublicInfo.cshtml", model);
         }
     }
 }

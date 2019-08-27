@@ -5,7 +5,7 @@
   "Version": "1.58",
   "SupportedVersions": [ "4.20" ],
   "Author": "Krasimir Mihaylov",
-  "DisplayOrder": 1,
+  "DisplayOrder": 3,
   "FileName": "Nop.Plugin.Widgets.HomePageNewProductsPlugin.dll",
   "Description": "This plugin will allow store owners to show a certain number of the recently added products in the store on the Home Page."
 }
