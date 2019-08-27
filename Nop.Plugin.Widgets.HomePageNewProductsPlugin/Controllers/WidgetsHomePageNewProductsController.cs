@@ -34,6 +34,7 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin.Controllers
             _storeContext = storeContext;
             _notificationService = notificationService;
             _productService = productService;
+            _localizationService = localizationService;
         }
 
         [AuthorizeAdmin] 
@@ -65,6 +66,7 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin.Controllers
 
         [HttpPost]
         [AuthorizeAdmin]
+        [Area(AreaNames.Admin)]
         public IActionResult Configure(ConfigurationModel model)
         {
             var storeScope = _storeContext.ActiveStoreScopeConfiguration;
