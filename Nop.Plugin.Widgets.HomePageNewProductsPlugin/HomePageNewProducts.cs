@@ -13,8 +13,15 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin
 {
     public class HomePageNewProductsPlugin : BasePlugin, IWidgetPlugin
     {
+        private const string CONFIGURATION_PATH = "Admin/WidgetsHomePageNewProducts/Configure";
+        //private const string GET_WIDGET_VIEW_COMPONENT_NAME = "WidgetsHomePageNewProducts";
+        private const string GET_WIDGET_VIEW_COMPONENT_NAME = "WidgetsHomePageNewProductsPlugin";
+
+        private const int DEFAULT_NUMBER_OF_ADDED_PRODUCTS = 4;
         private const string RESOURCE_NAME_WIDDGET_ZONE = "HomePageNewProductsPlugin.WidgetZone";
-        private const string RESORCE_NAME_NUMBER_OF_ADEED_PRODUCTS = "HomePageNewProductsPlugin.NumberOfAddedProducts";
+        private const string RESOURCE_VALUE_WIDDGET_ZONE = "Widget zone";
+        private const string RESOURCE_NAME_NUMBER_OF_ADEED_PRODUCTS = "HomePageNewProductsPlugin.NumberOfAddedProducts";
+        private const string RESOURCE_VALUE_NUMBER_OF_ADEED_PRODUCTS = "Number of products to display";
 
         #region Fields
 
@@ -41,7 +48,7 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin
 
         public string GetWidgetViewComponentName(string widgetZone)
         {
-            return $"WidgetsHomePageNewProducts";
+            return GET_WIDGET_VIEW_COMPONENT_NAME;
         }
 
         public IList<string> GetWidgetZones()
@@ -60,7 +67,7 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin
 
         public override string GetConfigurationPageUrl()
         {
-            return $"{_webHelper.GetStoreLocation()}Admin/WidgetsHomePageNewProducts/Configure";
+            return $"{_webHelper.GetStoreLocation()}{CONFIGURATION_PATH}";
         }
                
         public override void Install()
@@ -68,15 +75,15 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin
             //settings
             var settings = new HomePageNewProductsSettings
             {
-                NumberOfAddedProducts = 4,
+                NumberOfAddedProducts = DEFAULT_NUMBER_OF_ADDED_PRODUCTS,
                 WidgetZone = WidgetZone.home_page_top,
             };
 
             _settingService.SaveSetting(settings);
 
             //locales
-            _localizationService.AddOrUpdatePluginLocaleResource(RESOURCE_NAME_WIDDGET_ZONE, "Widget zone");
-            _localizationService.AddOrUpdatePluginLocaleResource(RESORCE_NAME_NUMBER_OF_ADEED_PRODUCTS, "Number of products to display");
+            _localizationService.AddOrUpdatePluginLocaleResource(RESOURCE_NAME_WIDDGET_ZONE, RESOURCE_VALUE_WIDDGET_ZONE);
+            _localizationService.AddOrUpdatePluginLocaleResource(RESOURCE_NAME_NUMBER_OF_ADEED_PRODUCTS, RESOURCE_VALUE_NUMBER_OF_ADEED_PRODUCTS);
 
             base.Install();
         }
@@ -86,7 +93,7 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin
             _settingService.DeleteSetting<HomePageNewProductsSettings>();
 
             _localizationService.DeletePluginLocaleResource(RESOURCE_NAME_WIDDGET_ZONE);
-            _localizationService.DeletePluginLocaleResource(RESORCE_NAME_NUMBER_OF_ADEED_PRODUCTS);
+            _localizationService.DeletePluginLocaleResource(RESOURCE_NAME_NUMBER_OF_ADEED_PRODUCTS);
 
             base.Uninstall();
         }

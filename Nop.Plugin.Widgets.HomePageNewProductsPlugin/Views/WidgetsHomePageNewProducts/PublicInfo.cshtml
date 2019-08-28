@@ -1,24 +1,38 @@
-﻿@model Nop.Plugin.Widgets.HomePageNewProductsPlugin.Models.PublicViewModel
-@using Nop.Web.Framework.UI
-
+﻿@model IEnumerable<PublicViewModel>
 @{
     Layout = "";
 }
 
-<div class="title">
-    <h2>Latest products</h2>
-</div>
-<div class="product-grid">
-    <div class="item-grid">
-        @foreach (var item in Model.Products)
-        {
-        <div class="item-box">
-            @item.Name
-            @item.ProductId
-            @item.ShortDescription
-        </div>
-        }
+<div class="product-grid home-page-product-grid">
+    <div class="title">
+        <strong>@T(Constans.LATES_PRODUCTS_LOCAL_KEY)</strong>
     </div>
 
+    <div class="item-grid">       
+        @foreach (var product in Model)
+        {
+            var imageAltText = string.Format(T("Media.Product.ImageAlternateTextFormat").Text, product.Name);
+            var imageTitleText = string.Format(T("Media.Product.ImageLinkTitleFormat").Text, product.Name);
+
+            <div class="item-box">
+                <div class="product-item" data-productid=@product.ProductId>
+                    <div class="picture">
+                        <a href=@Url.RouteUrl("Product", new { Name = product.Name })>
+                            <img alt="@(imageAltText)" src="@product.PictureUrl" title="@(imageTitleText)">
+                        </a>
+                    </div>
+                    <div class="details">
+                        <h2 class="product-title">
+                            <a href=@Url.RouteUrl("Product", new { Name = product.Name })>@product.Name</a>
+                        </h2>
+                        <div class="add-info">
+                            <div class="prices">
+                                <span class="price actual-price">@product.Price</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
-<br />

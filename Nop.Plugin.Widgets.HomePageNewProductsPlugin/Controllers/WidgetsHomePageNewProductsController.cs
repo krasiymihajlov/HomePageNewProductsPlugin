@@ -13,14 +13,20 @@ using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin.Controllers
 {
+
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    [AdminAntiForgery]
     public class WidgetsHomePageNewProductsController : BasePluginController
     {
+        private const string CONFIGURE_VIEW_PATH = "~/Plugins/Widgets.HomePageNewProductsPlugin/Views/WidgetsHomePageNewProducts/Configure.cshtml";
+        private const string RESOURCE_KEY = "Admin.Plugins.Saved";
+
         private readonly IPermissionService _permissionService;
         readonly ISettingService _settingService;
         private readonly IStoreContext _storeContext;
         private readonly INotificationService _notificationService;
         private readonly ILocalizationService _localizationService;
-        private readonly IProductService _productService;
 
         public WidgetsHomePageNewProductsController(IPermissionService permissionService,
             ISettingService settingService,
@@ -33,12 +39,9 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin.Controllers
             _settingService = settingService;
             _storeContext = storeContext;
             _notificationService = notificationService;
-            _productService = productService;
             _localizationService = localizationService;
         }
 
-        [AuthorizeAdmin] 
-        [Area(AreaNames.Admin)] 
         public IActionResult Configure()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageWidgets))
@@ -61,12 +64,10 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin.Controllers
                 model.NumberOfAddedProducts_OverrideForStore = _settingService.SettingExists(homePageNewProductsSettings, x => x.NumberOfAddedProducts, storeScope);
             }
 
-            return View("~/Plugins/Widgets.HomePageNewProductsPlugin/Views/WidgetsHomePageNewProducts/Configure.cshtml", model);
+            return View(CONFIGURE_VIEW_PATH, model);
         }
 
         [HttpPost]
-        [AuthorizeAdmin]
-        [Area(AreaNames.Admin)]
         public IActionResult Configure(ConfigurationModel model)
         {
             var storeScope = _storeContext.ActiveStoreScopeConfiguration;
@@ -86,7 +87,7 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin.Controllers
             }
 
             _settingService.ClearCache();
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(_localizationService.GetResource(RESOURCE_KEY));
 
             return Configure();
         }
