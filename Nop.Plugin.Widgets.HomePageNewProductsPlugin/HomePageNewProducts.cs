@@ -14,7 +14,6 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin
     public class HomePageNewProductsPlugin : BasePlugin, IWidgetPlugin
     {
         private const string CONFIGURATION_PATH = "Admin/WidgetsHomePageNewProducts/Configure";
-        //private const string GET_WIDGET_VIEW_COMPONENT_NAME = "WidgetsHomePageNewProducts";
         private const string GET_WIDGET_VIEW_COMPONENT_NAME = "WidgetsHomePageNewProductsPlugin";
 
         private const int DEFAULT_NUMBER_OF_ADDED_PRODUCTS = 4;
@@ -27,7 +26,8 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin
 
         private readonly ILocalizationService _localizationService;
         private readonly IWebHelper _webHelper;
-        private readonly ISettingService _settingService;       
+        private readonly ISettingService _settingService;
+        private readonly IStoreContext _storeContext;
 
         #endregion
 
@@ -35,11 +35,13 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin
 
         public HomePageNewProductsPlugin(ILocalizationService localizationService,
             IWebHelper webHelper,
-            ISettingService settingService)
+            ISettingService settingService,
+            IStoreContext storeContext)
         {
             _localizationService = localizationService;
             _webHelper = webHelper;
             _settingService = settingService;
+            _storeContext = storeContext;
         }
 
         #endregion
@@ -53,15 +55,12 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin
 
         public IList<string> GetWidgetZones()
         {
+            var storeScope = _storeContext.ActiveStoreScopeConfiguration;
+            var homePageNewProductsSettings = _settingService.LoadSetting<HomePageNewProductsSettings>(storeScope);
+
             return new List<string>
             {
-                PublicWidgetZones.HomepageTop,
-                PublicWidgetZones.HomepageBeforeCategories,
-                PublicWidgetZones.HomepageBeforeProducts,
-                PublicWidgetZones.HomepageBeforeBestSellers,
-                PublicWidgetZones.HomepageBeforeNews,
-                PublicWidgetZones.HomepageBeforePoll,
-                PublicWidgetZones.HomepageBottom
+               homePageNewProductsSettings.WidgetZone.ToString()
             };
         }
 

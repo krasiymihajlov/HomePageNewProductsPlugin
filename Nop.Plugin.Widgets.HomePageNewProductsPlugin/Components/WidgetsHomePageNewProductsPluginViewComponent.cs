@@ -27,27 +27,21 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin.Components
         private readonly IStaticCacheManager _cacheManager;
         private readonly ISettingService _settingService;
         private readonly IPictureService _pictureService;
-        private readonly IWebHelper _webHelper;
         private readonly IProductService _productService;
-        private readonly IDateTimeHelper _dateTimeHelper;
         private readonly MediaSettings _mediaSettings;
 
         public WidgetsHomePageNewProductsPluginViewComponent(IStoreContext storeContext,
             IStaticCacheManager cacheManager,
             ISettingService settingService,
             IPictureService pictureService,
-            IWebHelper webHelper,
             IProductService productService,
-            IDateTimeHelper dateTimeHelper,
             MediaSettings mediaSettings)
         {
             _storeContext = storeContext;
             _cacheManager = cacheManager;
             _settingService = settingService;
             _pictureService = pictureService;
-            _webHelper = webHelper;
             _productService = productService;
-            _dateTimeHelper = dateTimeHelper;
             _mediaSettings = mediaSettings;
         }
 
@@ -70,28 +64,11 @@ namespace Nop.Plugin.Widgets.HomePageNewProductsPlugin.Components
                                      ProductId = p.Id,
                                      Name = p.Name,
                                      PictureUrl = GetPictureUrl(p),
-                                     //Picture = GetPicture(p),
                                      Price = p.Price,
                                  });
 
             return View(PUBLIC_INFO_VIEW_PATH, model);
         }
-
-        //private ProductPicture GetPicture(Product product)
-        //{
-        //    if (product == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(product));
-        //    }
-
-        //    var cacheKey = string.Format(PICTURE_URL_MODEL_CACHE_KEY, product.Id);
-
-        //    return _cacheManager.Get(cacheKey, () =>
-        //    {
-        //        var picture = _pictureService.GetPicturesByProductId(product.Id, 1).FirstOrDefault();
-        //        return picture;
-        //    });
-        //}
 
         private string GetPictureUrl(Product product)
         {
